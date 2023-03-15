@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ZodiacProject</string>
+    <string name="description">Description</string>
+    <string name="symbol">Symbol</string>
+    <string name="month">Month</string>
+</resources>
