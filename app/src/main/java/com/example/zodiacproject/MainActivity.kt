@@ -17,21 +17,35 @@ class MainActivity : AppCompatActivity() {
         val zodiacDao = db.zodiacDao()
 
         val zodiacSigns = listOf(
-            ZodiacSign("Aries", "Courageous and Energetic.", "Ram", "April"),
-            ZodiacSign("Taurus", "Known for being reliable, practical, ambitious and sensual.", "Bull", "May"),
-            ZodiacSign("Gemini", "Gemini-born are clever and intellectual.", "Twins", "June"),
-            ZodiacSign("Cancer", "Tenacious, loyal and sympathetic.", "Crab", "July"),
-            ZodiacSign("Leo", "Warm, action-oriented and driven by the desire to be loved and admired.", "Lion", "August"),
-            ZodiacSign("Virgo", "Methodical, meticulous, analytical and mentally astute.", "Virgin", "September"),
-            ZodiacSign("Libra", "Librans are famous for maintaining balance and harmony.", "Scales", "October"),
-            ZodiacSign("Scorpio", "Strong willed and mysterious.", "Scorpion", "November"),
-            ZodiacSign("Sagittarius", "Born adventurers.", "Archer", "December"),
-            ZodiacSign("Capricorn", "The most determined sign in the Zodiac.", "Goat", "January"),
-            ZodiacSign("Aquarius", "Humanitarians to the core", "Water Bearer", "February"),
-            ZodiacSign("Pisces", "Proverbial dreamers of the Zodiac.", "Fish", "March")
+            ZodiacSign("Aries", "Courageous and Energetic.", "Ram", "April", ""),
+            ZodiacSign("Taurus", "Known for being reliable, practical, ambitious and sensual.", "Bull", "May", ""),
+            ZodiacSign("Gemini", "Gemini-born are clever and intellectual.", "Twins", "June", ""),
+            ZodiacSign("Cancer", "Tenacious, loyal and sympathetic.", "Crab", "July", ""),
+            ZodiacSign("Leo", "Warm, action-oriented and driven by the desire to be loved and admired.", "Lion", "August", ""),
+            ZodiacSign("Virgo", "Methodical, meticulous, analytical and mentally astute.", "Virgin", "September", ""),
+            ZodiacSign("Libra", "Librans are famous for maintaining balance and harmony.", "Scales", "October", ""),
+            ZodiacSign("Scorpio", "Strong willed and mysterious.", "Scorpion", "November", ""),
+            ZodiacSign("Sagittarius", "Born adventurers.", "Archer", "December", ""),
+            ZodiacSign("Capricorn", "The most determined sign in the Zodiac.", "Goat", "January", ""),
+            ZodiacSign("Aquarius", "Humanitarians to the core", "Water Bearer", "February", ""),
+            ZodiacSign("Pisces", "Proverbial dreamers of the Zodiac.", "Fish", "March", "")
         )
         lifecycleScope.launch {
+
+
             zodiacDao.clearDatabase()
+
+            try {
+                val zodiacApi =  RetrofitHelper.getInstance().create(ZodiacApiService::class.java)
+                val result = zodiacApi.getZodiacSignData()
+                result.forEachIndexed { index, zodiacSignHoroscope ->
+                    zodiacSigns[index].horoscope = zodiacSignHoroscope.title.toString()
+                }
+
+            } catch (e: Exception) {
+                Log.d("Failure:", "${e.message}")
+            }
+
             for(sign in zodiacSigns){
                 zodiacDao.insertIntoZodiacTable(sign)
             }

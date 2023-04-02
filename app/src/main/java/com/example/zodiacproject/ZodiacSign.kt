@@ -9,5 +9,6 @@ data class ZodiacSign (
     @PrimaryKey val name: String,
     val description: String,
     val symbol:String,
-    val month: String
+    val month: String,
+    var horoscope: String
 )
